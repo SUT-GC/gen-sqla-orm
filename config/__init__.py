@@ -2,6 +2,8 @@
 
 import yaml
 
+from utils import gen_file_abspath
+
 import os
 import sys
 
@@ -9,16 +11,19 @@ sys.path.append(os.path.abspath(__file__))
 reload(sys)
 sys.setdefaultencoding("utf-8")
 
-file_path = "db_config.yml"
+file_path = gen_file_abspath("/config/db_config.yml")
 
 
 class Config(object):
-    def __init__(self, host, user, port, pawd, name):
+    def __init__(self, host, user, pawd, port, name):
         self.host_name = host
         self.user_name = user
         self.pass_word = pawd
         self.port = port
         self.name = name
+
+    def __str__(self):
+        return "host:%s, port:%s, user:%s, pass:%s, name:%s" % (self.host_name, self.port, self.user_name, self.pass_word, self.name)
 
 
 def get_db_config():
@@ -33,15 +38,15 @@ def get_db_config():
     }
     """
     r_file = open(file_path, "r")
-    resource = yaml.load(r_file)
+    resource = yaml.load(r_file, Loader=yaml.FullLoader)
     result = {}
     for db_name, db_config in resource.items():
         config = Config(
-            db_config.get("hostName"),
-            db_config.get("userName"),
-            db_config.get("passWord"),
-            db_config.get("dbPort"),
-            db_config.get("dbName")
+            str(db_config.get("hostName")),
+            str(db_config.get("userName")),
+            str(db_config.get("passWord")),
+            int(db_config.get("dbPort")),
+            str(db_config.get("dbName"))
         )
         result[db_name] = config
 
