@@ -34,6 +34,16 @@ class DBConfig(object):
         return "host:%s, port:%s, user:%s, pass:%s, name:%s" % (self.host_name, self.port, self.user_name, self.pass_word, self.name)
 
 
+def set_gen_config(path):
+    global gen_config_file_path
+    gen_config_file_path = path
+
+
+def set_db_config(path):
+    global db_config_file_path
+    db_config_file_path = path
+
+
 def get_gen_config():
     r_file = open(gen_config_file_path, "r")
     resource = yaml.load(r_file, Loader=yaml.FullLoader)

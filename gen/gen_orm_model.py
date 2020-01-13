@@ -9,8 +9,29 @@ reload(sys)
 sys.setdefaultencoding("utf-8")
 
 from config import (
-    get_gen_config
+    get_gen_config,
+    set_db_config,
+    set_gen_config
 )
+
+gen_config = get_gen_config()
+
+gen_project_names = gen_config.gen_list
+ignore_shard = gen_config.ignore_shard
+root_path = gen_config.root_path
+
+if __name__ == "__main__":
+    args = sys.argv
+    db_config_path = args[1] if len(args) > 1 else None
+    gen_config_path = args[2] if len(args) > 2 else None
+    target_path = args[3] if len(args) > 3 else None
+
+    if db_config_path:
+        set_db_config(db_config_path)
+    if gen_config_path:
+        set_gen_config(gen_config_path)
+    if target_path:
+        root_path = target_path
 
 from utils import (
     gen_file_abspath,
@@ -28,12 +49,6 @@ from gen_mapper import (
     find_sqlalchemy_type,
     find_default_value
 )
-
-gen_config = get_gen_config()
-
-gen_project_names = gen_config.gen_list
-ignore_shard = gen_config.ignore_shard
-root_path = gen_config.root_path
 
 print '[info] read gen config success, gen_project_names:%s, ignore_shard:%s, root_path:%s ...' % (gen_project_names, ignore_shard, root_path)
 
