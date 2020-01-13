@@ -11,10 +11,18 @@ sys.path.append(os.path.abspath(__file__))
 reload(sys)
 sys.setdefaultencoding("utf-8")
 
-file_path = gen_file_abspath("/config/db_config.yml")
+db_config_file_path = gen_file_abspath("/config/db_config.yml")
+gen_config_file_path = gen_file_abspath("/config/gen_config.yml")
 
 
-class Config(object):
+class GenConfig(object):
+    def __init__(self, gen_project_list, ignore_shard, root_path):
+        self.gen_list = gen_project_list
+        self.ignore_shard = ignore_shard
+        self.root_path = root_path
+
+
+class DBConfig(object):
     def __init__(self, host, user, pawd, port, name):
         self.host_name = host
         self.user_name = user
@@ -24,6 +32,15 @@ class Config(object):
 
     def __str__(self):
         return "host:%s, port:%s, user:%s, pass:%s, name:%s" % (self.host_name, self.port, self.user_name, self.pass_word, self.name)
+
+
+def get_gen_config():
+    r_file = open(gen_config_file_path, "r")
+    resource = yaml.load(r_file, Loader=yaml.FullLoader)
+
+    return GenConfig(resource.get("genProjectNames"),
+                     resource.get("ignoreShard"),
+                     resource.get("rootPath"))
 
 
 def get_db_config():
@@ -37,11 +54,11 @@ def get_db_config():
         }
     }
     """
-    r_file = open(file_path, "r")
+    r_file = open(db_config_file_path, "r")
     resource = yaml.load(r_file, Loader=yaml.FullLoader)
     result = {}
     for db_name, db_config in resource.items():
-        config = Config(
+        config = DBConfig(
             str(db_config.get("hostName")),
             str(db_config.get("userName")),
             str(db_config.get("passWord")),

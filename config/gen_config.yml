@@ -1,0 +1,6 @@
+genProjectNames:
+  - TestDB_1
+  - TestDB_2
+
+ignoreShard: true
+#rootPath: null

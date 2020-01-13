@@ -15,8 +15,8 @@ sys.setdefaultencoding("utf-8")
 class DBConnection(object):
     def __init__(self, config):
         self.__db_config = config
-
         self.__db_connect = self.__connect()
+        print '[info] init db connect success ...'
 
     def __connect(self):
         return pymysql.connect(
