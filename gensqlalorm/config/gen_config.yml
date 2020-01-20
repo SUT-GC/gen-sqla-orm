@@ -1,5 +1,2 @@
 genProjectNames:
-  - GcTest
-
-ignoreShard: true
-#rootPath: null
+- gc

@@ -11,8 +11,8 @@ sys.path.append(os.path.abspath(__file__))
 reload(sys)
 sys.setdefaultencoding("utf-8")
 
-db_config_file_path = gen_file_abspath("/config/db_config.yml")
-gen_config_file_path = gen_file_abspath("/config/gen_config.yml")
+db_config_file_path = "db_config.yml"
+gen_config_file_path = "gen_config.yml"
 
 
 class GenConfig(object):
@@ -32,16 +32,6 @@ class DBConfig(object):
 
     def __str__(self):
         return "host:%s, port:%s, user:%s, pass:%s, name:%s" % (self.host_name, self.port, self.user_name, self.pass_word, self.name)
-
-
-def set_gen_config(path):
-    global gen_config_file_path
-    gen_config_file_path = path
-
-
-def set_db_config(path):
-    global db_config_file_path
-    db_config_file_path = path
 
 
 def get_gen_config():

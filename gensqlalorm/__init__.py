@@ -1,6 +1,7 @@
 #! -*- coding:utf8 -*-
 import sys
 import os
+import yaml
 
 sys.path.append(os.path.abspath(".."))
 reload(sys)
@@ -9,6 +10,37 @@ sys.setdefaultencoding("utf-8")
 from utils import (
     is_number
 )
+
+from gen import (
+    gen_orm_model
+)
+
+
+def set_url(input_url):
+    host_name = input_url.split(":")[0]
+    host_port = input_url.split(":")[1].split("/")[0]
+    db_name = input_url.split("/")[1].split("?")[0]
+    user_name = input_url.split("username=")[1].split("&")[0]
+    pass_word = input_url.split("password=")[1]
+
+    yaml_db_config = {
+        db_name: {
+            "hostName": host_name,
+            "userName": user_name,
+            "passWord": pass_word,
+            "dbPort": host_port,
+            "dbName": db_name
+        }
+    }
+    yaml_gen_config = {
+        "genProjectNames": [db_name]
+    }
+
+    w_db_config_file = open("./config/db_config.yml", "w+")
+    w_gen_config_file = open("./config/gen_config.yml", "w+")
+
+    yaml.dump(yaml_db_config, w_db_config_file, Dumper=yaml.Dumper)
+    yaml.dump(yaml_gen_config, w_gen_config_file, Dumper=yaml.Dumper)
 
 
 def check_url(input_url):
@@ -111,7 +143,7 @@ def gen_console():
     print '''
     step 1 select mode:
         c: config mode, read db config from config file. you can read README.md to get the file layout 
-        u: url mode, read db config from url. like localhost:3306/db_name?username=root&password=123
+        u: url mode, read db config from url. like localhost:3306/gc?username=root&password=gc
     step 2 input the path where to output:
         the path use to output orm class file, like '/gc/orm/'
     '''
@@ -130,6 +162,7 @@ def gen_console():
             if not check_path(input_out_path):
                 print "input path error, place input path like /gc/orm/"
                 continue
+            set_url(input_url)
             print 'set url success...'
             break
         elif select_mode.lower() == 'c':
@@ -153,6 +186,7 @@ def gen_console():
             continue
         if gen_now.lower() == "y":
             print 'start to gen...'
+            gen_orm_model.gen()
             break
         else:
             print 'stop the program...'

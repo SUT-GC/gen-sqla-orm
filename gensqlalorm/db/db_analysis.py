@@ -12,11 +12,22 @@ from gensqlalorm.config import get_db_config
 from db_connect import DBConnectionPool
 from db_executor import DBExecutor
 
-db_connection_pool = DBConnectionPool(get_db_config())
-db_executor = DBExecutor(db_connection_pool)
+db_connection_pool = None
+db_executor = None
+
+
+def init():
+    global db_connection_pool
+    global db_executor
+
+    if db_connection_pool is None:
+        db_connection_pool = DBConnectionPool(get_db_config())
+    if db_executor is None:
+        db_executor = DBExecutor(db_connection_pool)
 
 
 def desc_table(project_name, table_name):
+    init()
     """
     [
         {
@@ -46,6 +57,7 @@ def desc_table(project_name, table_name):
 
 
 def show_tables(project_name):
+    init()
     """
     ['table_name_1', 'table_name_2']
     """
