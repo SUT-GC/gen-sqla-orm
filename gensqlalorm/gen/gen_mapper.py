@@ -4,7 +4,7 @@ import os
 import sys
 import json
 
-sys.path.append(os.path.abspath(".."))
+sys.path.append(os.path.abspath("../.."))
 reload(sys)
 sys.setdefaultencoding("utf-8")
 
@@ -18,6 +18,7 @@ FIELD_MAPPER = {
     "float": "Float",
     "double": "Float",
     "decimal": "Float",
+    "date": "DateTime",
     "datetime": "DateTime",
     "timestamp": "DateTime",
     "char": "String",
@@ -30,6 +31,7 @@ FIELD_MAPPER = {
     "mediumtext": "String",
     "longblob": "String",
     "longtext": "String",
+    "bit": "String"
 }
 
 DEFAULT_VALUE_MAPPER_FORMAT = {

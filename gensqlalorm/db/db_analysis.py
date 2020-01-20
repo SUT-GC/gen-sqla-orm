@@ -4,11 +4,11 @@ import os
 import sys
 import json
 
-sys.path.append(os.path.abspath(".."))
+sys.path.append(os.path.abspath("../.."))
 reload(sys)
 sys.setdefaultencoding("utf-8")
 
-from config import get_db_config
+from gensqlalorm.config import get_db_config
 from db_connect import DBConnectionPool
 from db_executor import DBExecutor
 

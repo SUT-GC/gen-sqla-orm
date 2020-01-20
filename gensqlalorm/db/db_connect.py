@@ -2,7 +2,7 @@
 
 import pymysql
 
-from config import get_db_config
+from gensqlalorm.config import get_db_config
 
 import os
 import sys

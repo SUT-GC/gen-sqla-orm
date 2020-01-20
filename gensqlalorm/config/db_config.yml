@@ -1,0 +1,6 @@
+GcTest:
+  hostName: localhost
+  userName: root
+  passWord: gc
+  dbPort: 3306
+  dbName: gc

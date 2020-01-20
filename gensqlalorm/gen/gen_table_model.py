@@ -2,16 +2,15 @@
 
 import os
 import sys
-import json
 
-sys.path.append(os.path.abspath(".."))
+sys.path.append(os.path.abspath("../.."))
 reload(sys)
 sys.setdefaultencoding("utf-8")
 
 from utils import (
     format_for_hump
 )
-from db import (
+from gensqlalorm.db import (
     desc_table,
     show_tables
 )

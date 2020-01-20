@@ -1,6 +1,5 @@
 genProjectNames:
-  - TestDB_1
-  - TestDB_2
+  - GcTest
 
 ignoreShard: true
 #rootPath: null
