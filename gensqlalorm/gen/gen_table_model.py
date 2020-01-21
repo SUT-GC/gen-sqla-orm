@@ -3,11 +3,11 @@
 import os
 import sys
 
-sys.path.append(os.path.abspath("../.."))
+sys.path.append(os.path.abspath(__file__))
 reload(sys)
 sys.setdefaultencoding("utf-8")
 
-from utils import (
+from gensqlalorm.utils import (
     format_for_hump
 )
 from gensqlalorm.db import (

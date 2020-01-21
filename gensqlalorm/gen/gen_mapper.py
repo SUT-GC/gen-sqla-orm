@@ -4,7 +4,7 @@ import os
 import sys
 import json
 
-sys.path.append(os.path.abspath("../.."))
+sys.path.append(os.path.abspath(__file__))
 reload(sys)
 sys.setdefaultencoding("utf-8")
 

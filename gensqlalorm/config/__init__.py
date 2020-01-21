@@ -2,8 +2,6 @@
 
 import yaml
 
-from utils import gen_file_abspath
-
 import os
 import sys
 
@@ -11,8 +9,12 @@ sys.path.append(os.path.abspath(__file__))
 reload(sys)
 sys.setdefaultencoding("utf-8")
 
-db_config_file_path = "db_config.yml"
-gen_config_file_path = "gen_config.yml"
+from gensqlalorm.utils import (
+    gen_file_abspath
+)
+
+db_config_file_path = gen_file_abspath("config/db_config.yml")
+gen_config_file_path = gen_file_abspath("config/gen_config.yml")
 
 
 class GenConfig(object):
@@ -20,6 +22,9 @@ class GenConfig(object):
         self.gen_list = gen_project_list
         self.ignore_shard = ignore_shard
         self.root_path = root_path
+
+    def __str__(self):
+        return "gen_list:%s, ignore_shard:%s, root_path:%s" % (self.gen_list, self.ignore_shard, self.root_path)
 
 
 class DBConfig(object):

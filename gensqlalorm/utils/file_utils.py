@@ -4,13 +4,11 @@ import os
 import sys
 import json
 
-sys.path.append(os.path.abspath(".."))
+sys.path.append(os.path.abspath(__file__))
 reload(sys)
 sys.setdefaultencoding("utf-8")
 
-import os
-
-program_path = os.path.abspath("..")
+program_path = os.path.abspath(__file__ + "/../..")
 
 
 def gen_file_abspath(file_path, root_path=None):

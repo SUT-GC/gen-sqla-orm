@@ -3,7 +3,7 @@
 import os
 import sys
 
-sys.path.append(os.path.abspath("../.."))
+sys.path.append(os.path.abspath(__file__))
 reload(sys)
 sys.setdefaultencoding("utf-8")
 
@@ -11,7 +11,7 @@ from gensqlalorm.config import (
     get_gen_config,
 )
 
-from utils import (
+from gensqlalorm.utils import (
     gen_file_abspath,
     format_for_hump,
     format_for_shard

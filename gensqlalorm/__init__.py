@@ -3,11 +3,11 @@ import sys
 import os
 import yaml
 
-sys.path.append(os.path.abspath(".."))
+sys.path.append(os.path.abspath("."))
 reload(sys)
 sys.setdefaultencoding("utf-8")
 
-from utils import (
+from gensqlalorm.utils import (
     is_number
 )
 
@@ -15,8 +15,26 @@ from gen import (
     gen_orm_model
 )
 
+from gensqlalorm.utils import (
+    gen_file_abspath
+)
 
-def set_url(input_url):
+
+def set_config_for_c(db_config_path, gen_config_path):
+    from_db_config = open(db_config_path, "r")
+    from_gen_config = open(gen_config_path, "r")
+
+    to_db_config = open(gen_file_abspath("config/db_config.yml"), "w+")
+    to_gen_config = open(gen_file_abspath("config/gen_config.yml"), "w+")
+
+    db_config = yaml.load(from_db_config, yaml.FullLoader)
+    yaml.dump(db_config, to_db_config, yaml.Dumper)
+
+    gen_config = yaml.load(from_gen_config, yaml.FullLoader)
+    yaml.dump(gen_config, to_gen_config, yaml.Dumper)
+
+
+def set_config_for_u(input_url, output_path):
     host_name = input_url.split(":")[0]
     host_port = input_url.split(":")[1].split("/")[0]
     db_name = input_url.split("/")[1].split("?")[0]
@@ -33,11 +51,12 @@ def set_url(input_url):
         }
     }
     yaml_gen_config = {
-        "genProjectNames": [db_name]
+        "genProjectNames": [db_name],
+        "rootPath": output_path
     }
 
-    w_db_config_file = open("./config/db_config.yml", "w+")
-    w_gen_config_file = open("./config/gen_config.yml", "w+")
+    w_db_config_file = open(gen_file_abspath("config/db_config.yml"), "w+")
+    w_gen_config_file = open(gen_file_abspath("config/gen_config.yml"), "w+")
 
     yaml.dump(yaml_db_config, w_db_config_file, Dumper=yaml.Dumper)
     yaml.dump(yaml_gen_config, w_gen_config_file, Dumper=yaml.Dumper)
@@ -162,18 +181,19 @@ def gen_console():
             if not check_path(input_out_path):
                 print "input path error, place input path like /gc/orm/"
                 continue
-            set_url(input_url)
+            set_config_for_u(input_url, input_out_path)
             print 'set url success...'
             break
         elif select_mode.lower() == 'c':
-            input_config_path = raw_input("place input db config path : ")
-            if not check_file(input_config_path):
-                print "input config file path error, place input path like /gc/orm/config.yml"
+            input_db_config_path = raw_input("place input db config path : ")
+            if not check_file(input_db_config_path):
+                print "input db config file path error, place input path like /gc/orm/db_config.yml"
                 continue
-            input_out_path = raw_input("place input out orm class path : ")
-            if not check_path(input_out_path):
-                print "input path error, place input path like /gc/orm/"
+            input_gen_config_path = raw_input("place input gen config path : ")
+            if not check_file(input_gen_config_path):
+                print "input gen config file path error, place input path like /gc/orm/gen_config.yml"
                 continue
+            set_config_for_c(input_db_config_path, input_gen_config_path)
             print 'set config success...'
             break
         else:
@@ -195,5 +215,10 @@ def gen_console():
     print '''----------------------------------- finish -----------------------------------'''
 
 
+def gen_test():
+    gen_orm_model.gen()
+
+
 if __name__ == "__main__":
-    gen_console()
+    # gen_console()
+    gen_test()
