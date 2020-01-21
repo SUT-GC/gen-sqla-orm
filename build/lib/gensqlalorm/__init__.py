@@ -1,6 +1,7 @@
 #! -*- coding:utf8 -*-
-import os
 import sys
+import os
+import yaml
 
 reload(sys)
 sys.setdefaultencoding("utf-8")
@@ -14,19 +15,19 @@ from gensqlalorm.gen import (
     gen_orm_model
 )
 
-from gensqlalorm.config import (
-    set_db_config_path,
-    set_gen_config_path,
-    set_db_config,
-    set_gen_config,
-    DBConfig,
-    GenConfig
-)
-
 
 def set_config_for_c(db_config_path, gen_config_path):
-    set_db_config_path(db_config_path)
-    set_gen_config_path(gen_config_path)
+    from_db_config = open(db_config_path, "r")
+    from_gen_config = open(gen_config_path, "r")
+
+    to_db_config = open(gen_file_abspath("config/db_config.yml"), "w+")
+    to_gen_config = open(gen_file_abspath("config/gen_config.yml"), "w+")
+
+    db_config = yaml.load(from_db_config, yaml.FullLoader)
+    yaml.dump(db_config, to_db_config, yaml.Dumper)
+
+    gen_config = yaml.load(from_gen_config, yaml.FullLoader)
+    yaml.dump(gen_config, to_gen_config, yaml.Dumper)
 
 
 def set_config_for_u(input_url, output_path):
@@ -36,23 +37,25 @@ def set_config_for_u(input_url, output_path):
     user_name = input_url.split("username=")[1].split("&")[0]
     pass_word = input_url.split("password=")[1]
 
-    db_config = DBConfig(
-        host=host_name,
-        port=host_port,
-        user=user_name,
-        pawd=pass_word,
-        name=db_name
-    )
+    yaml_db_config = {
+        db_name: {
+            "hostName": host_name,
+            "userName": user_name,
+            "passWord": pass_word,
+            "dbPort": host_port,
+            "dbName": db_name
+        }
+    }
+    yaml_gen_config = {
+        "genProjectNames": [db_name],
+        "rootPath": output_path
+    }
 
-    all_db_config = {db_name: db_config}
-    set_db_config(all_db_config)
+    w_db_config_file = open(gen_file_abspath("config/db_config.yml"), "w+")
+    w_gen_config_file = open(gen_file_abspath("config/gen_config.yml"), "w+")
 
-    gen_config = GenConfig(
-        gen_project_list=[db_name],
-        ignore_shard=None,
-        root_path=output_path
-    )
-    set_gen_config(gen_config)
+    yaml.dump(yaml_db_config, w_db_config_file, Dumper=yaml.Dumper)
+    yaml.dump(yaml_gen_config, w_gen_config_file, Dumper=yaml.Dumper)
 
 
 def check_url(input_url):

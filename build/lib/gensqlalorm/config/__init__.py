@@ -12,6 +12,9 @@ from gensqlalorm.utils import (
     gen_file_abspath
 )
 
+db_config_file_path = gen_file_abspath("config/db_config.yml")
+gen_config_file_path = gen_file_abspath("config/gen_config.yml")
+
 
 class GenConfig(object):
     def __init__(self, gen_project_list, ignore_shard, root_path):
@@ -35,47 +38,7 @@ class DBConfig(object):
         return "host:%s, port:%s, user:%s, pass:%s, name:%s" % (self.host_name, self.port, self.user_name, self.pass_word, self.name)
 
 
-db_config = None
-gen_config = None
-
-db_config_file_path = None
-gen_config_file_path = None
-
-
-def set_db_config(config):
-    global db_config
-    db_config = config
-
-
-def set_gen_config(config):
-    global gen_config
-    gen_config = config
-
-
-def set_db_config_path(config_path):
-    global db_config_file_path
-    db_config_file_path = config_path
-
-
-def set_gen_config_path(config_path):
-    global gen_config_file_path
-    gen_config_file_path = config_path
-
-
-def set_db_config_path(config_path):
-    global db_config_file_path
-    db_config_file_path = config_path
-
-
 def get_gen_config():
-    global gen_config
-    if gen_config is not None:
-        return gen_config
-
-    global gen_config_file_path
-    if gen_config_file_path is None:
-        raise Exception("gen config path is None")
-
     r_file = open(gen_config_file_path, "r")
     resource = yaml.load(r_file, Loader=yaml.FullLoader)
 
@@ -95,14 +58,6 @@ def get_db_config():
         }
     }
     """
-    global db_config
-    if db_config is not None:
-        return db_config
-
-    global db_config_file_path
-    if db_config_file_path is None:
-        raise Exception("db config is none")
-
     r_file = open(db_config_file_path, "r")
     resource = yaml.load(r_file, Loader=yaml.FullLoader)
     result = {}

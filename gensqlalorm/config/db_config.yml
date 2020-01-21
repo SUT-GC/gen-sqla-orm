@@ -1,6 +1,0 @@
-gc:
-  dbName: gc
-  dbPort: '3306'
-  hostName: localhost
-  passWord: gc
-  userName: root

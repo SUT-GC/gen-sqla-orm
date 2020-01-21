@@ -24,7 +24,7 @@ class DBConnection(object):
             self.__db_config.user_name,
             self.__db_config.pass_word,
             self.__db_config.name,
-            int(self.__db_config.port)
+            self.__db_config.port
         )
 
     def get_cursor(self):
