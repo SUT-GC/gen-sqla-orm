@@ -88,7 +88,7 @@ def gen():
         tables = show_all_tables(project_name)
         duplicate_table = set()
         for table in tables:
-            table_name = format_for_shard(table) if ignore_shard else table
+            table_name = format_for_shard(table) if True else table
             if table_name in duplicate_table:
                 continue
             else:

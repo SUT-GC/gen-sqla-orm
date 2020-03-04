@@ -11,7 +11,8 @@ from gensqlalorm.utils import (
 )
 from gensqlalorm.db import (
     desc_table,
-    show_tables
+    show_tables,
+    show_create_table
 )
 
 

@@ -25,6 +25,31 @@ def init():
         db_executor = DBExecutor(db_connection_pool)
 
 
+def show_create_table(project_name, table_name):
+    """
+    [{
+        "column": 'xxxx',
+        "type: 'bigint(20)',
+        "comment: 'xxxxx'
+    }]
+    """
+    init()
+    sql_r = db_executor.exec_sql(project_name, "show create table %s;" % table_name)
+    table_create_sql = sql_r[0][1]
+    result = []
+    table_create_sql_lines = table_create_sql.split("\n")
+    for table_create_sql_line in table_create_sql_lines:
+        table_create_sql_line = table_create_sql_line.strip()
+        if table_create_sql_line.startswith("`") and table_create_sql_line.endswith(","):
+            one = {}
+            one["column"] = table_create_sql_line.split("` ")[0].split("`")[1]
+            one["type"] = table_create_sql_line.split("` ")[1].split(" ")[0]
+            one["comment"] = table_create_sql_line.split("COMMENT ")[1].replace(",", "").replace("'", "") if "COMMENT" in table_create_sql_line else ""
+            result.append(one)
+
+    return result
+
+
 def desc_table(project_name, table_name):
     init()
     """
@@ -73,4 +98,4 @@ def show_tables(project_name):
 
 if __name__ == "__main__":
     print json.dumps(show_tables("TestDB_2"))
-    print json.dumps(desc_table("TestDB_2", "gc_test_shard_table_2"))
+    print json.dumps(desc_table("PayPrivilege", "gc_test_shard_table_2"))
