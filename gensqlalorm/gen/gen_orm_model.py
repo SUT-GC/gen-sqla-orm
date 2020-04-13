@@ -98,8 +98,10 @@ def gen():
             class_name = format_for_hump(table_name)
             project_model_py.write(empty_line)
             project_model_py.write(empty_line)
-            project_model_py.write("class %s(Base):\n" % class_name)
-            project_model_py.write("    __tablename__ = \"%s\"\n" % table_name)
+            project_model_py.write("class %s():\n" % class_name)
+            project_model_py.write("    __tn = \"%s\"\n" % table_name)
+            project_model_py.write(empty_line)
+            project_model_py.write("    __model_cache = {}\n")
             project_model_py.write(empty_line)
             for column in table_desc:
                 line = ""
@@ -128,3 +130,25 @@ def gen():
                 project_model_py.write(line)
 
             print '[info] write table 【%s】 model success ...' % table_name
+
+            project_model_py.write("""
+    @classmethod
+    def clazz(cls, shard_id, shard_count):
+        table_name = "%s_%s" % (cls.__tn, int(shard_id) % int(shard_count))
+        model_name = "%s_%s" % (cls.__name__, int(shard_id) % int(shard_count))
+
+        if cls.__model_cache.get(model_name):
+            return cls.__model_cache.get(model_name)
+
+        clazz = type(model_name, (cls, Base), {
+            '__tablename__': table_name,
+        })
+
+        cls.__model_cache[model_name] = clazz
+
+        return clazz
+
+    @classmethod
+    def model(cls, shard_id, shard_count):
+        return cls.clazz(shard_id, shard_count)()
+            """)
