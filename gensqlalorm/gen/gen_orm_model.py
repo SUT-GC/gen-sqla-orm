@@ -133,9 +133,9 @@ def gen():
 
             project_model_py.write("""
     @classmethod
-    def clazz(cls, shard_id, shard_count):
-        table_name = "%s_%s" % (cls.__tn, int(shard_id) % int(shard_count))
-        model_name = "%s_%s" % (cls.__name__, int(shard_id) % int(shard_count))
+    def clazz(cls, shard_id, shard_count, shard_tag):
+        table_name = "%s_%s" % (cls.__tn, int(shard_id) % int(shard_count)) if shard_tag else cls.__tn
+        model_name = "%s_%s" % (cls.__name__, int(shard_id) % int(shard_count)) if shard_tag else cls.__name__ + "tmp"
 
         if cls.__model_cache.get(model_name):
             return cls.__model_cache.get(model_name)
@@ -149,6 +149,6 @@ def gen():
         return clazz
 
     @classmethod
-    def model(cls, shard_id, shard_count):
-        return cls.clazz(shard_id, shard_count)()
+    def model(cls, shard_id, shard_count, shard_tag=True):
+        return cls.clazz(shard_id, shard_count, shard_tag)()
             """)
