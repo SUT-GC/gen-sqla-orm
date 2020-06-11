@@ -7,7 +7,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setup(name='gensqlalorm',
-      version='0.0.13',
+      version='0.0.14',
       description='a generate sqlarchemy models utils',
       url='https://github.com/SUT-GC/gen-sqla-orm',
       author='gouchao',
